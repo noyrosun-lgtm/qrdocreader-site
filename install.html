@@ -1,1 +1,131 @@
-<img class="logo" src="./QR-DOC-READER-Logo.png" alt="QR DOC READER logo">
+<!DOCTYPE html>
+
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Installer QR DOC READER</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f3f6fb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    .logo {
+      width: 140px;
+      margin-bottom: 15px;
+    }
+
+    h1 {
+      margin: 10px 0;
+    }
+
+    p {
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      display: block;
+      margin: 10px 0;
+      padding: 14px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .primary {
+      background: #1d4f9c;
+      color: white;
+    }
+
+    .secondary {
+      background: #eee;
+      color: #333;
+    }
+
+    .status {
+      margin: 15px 0;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+  <img class="logo" src="./QR-DOC-READER-Logo.png" alt="QR DOC READER logo">
+
+  <h1>QR DOC READER</h1>
+
+  <p>
+    Skann QR-koder og åpne dokumenter med opplesning direkte på mobilen.
+  </p>
+
+  <div id="status" class="status">Sjekker enhet...</div>
+
+<a id="mainBtn" class="btn primary" href="#">Åpne butikk</a> <a id="iosBtn" class="btn secondary" href="#">App Store</a> <a id="androidBtn" class="btn secondary" href="#">Google Play</a>
+
+  <p style="font-size:12px; color:#999;">© 2026 Fti AS</p>
+
+</div>
+
+<script>
+  const APP_STORE_ID = "1234567890";
+  const PLAY_STORE_ID = "com.example.qrdocreader";
+
+  const appStore = `https://apps.apple.com/app/id${APP_STORE_ID}`;
+  const playStore = `https://play.google.com/store/apps/details?id=${PLAY_STORE_ID}`;
+
+  const ua = navigator.userAgent;
+  const status = document.getElementById("status");
+  const mainBtn = document.getElementById("mainBtn");
+
+  document.getElementById("iosBtn").href = appStore;
+  document.getElementById("androidBtn").href = playStore;
+
+  function isIOS() {
+    return /iPhone|iPad|iPod/i.test(ua);
+  }
+
+  function isAndroid() {
+    return /Android/i.test(ua);
+  }
+
+  if (isIOS()) {
+    status.textContent = "Sender til App Store...";
+    mainBtn.href = appStore;
+    mainBtn.textContent = "Åpne App Store";
+    window.location.href = appStore;
+  } else if (isAndroid()) {
+    status.textContent = "Sender til Google Play...";
+    mainBtn.href = playStore;
+    mainBtn.textContent = "Åpne Google Play";
+    window.location.href = playStore;
+  } else {
+    status.textContent = "Velg butikk manuelt";
+    mainBtn.textContent = "Velg selv";
+  }
+</script>
+
+</body>
+</html>
