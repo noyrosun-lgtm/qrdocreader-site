@@ -29,9 +29,9 @@
     }
 
     .logo {
-      width: 120px;
-      margin-bottom: 15px;
-      border-radius: 24px;
+      width: 140px;
+      margin-bottom: 18px;
+      border-radius: 28px;
     }
 
     h1 {
@@ -122,7 +122,7 @@
       }
 
       .logo {
-        width: 105px;
+        width: 120px;
       }
     }
   </style>
@@ -136,8 +136,8 @@
     <h1>QR DOC READER</h1>
 
     <div class="desc">
-      Scan QR codes and instantly access document content.<br>
-      Read, translate and listen — directly on your mobile device.
+      Scan QR codes and instantly unlock document content.<br>
+      Read, translate and listen — all in one simple workflow.
     </div>
 
     <div class="highlight">
@@ -147,16 +147,16 @@
     </div>
 
     <div class="buttons">
-      <a href="https://apps.apple.com/app/id6760977519" class="btn btn-primary">
+      <a id="iphoneBtn" href="https://apps.apple.com/app/id6760977519" class="btn btn-primary">
         Download for iPhone
       </a>
 
-      <div class="btn btn-secondary disabled">
+      <div id="androidBtn" class="btn btn-secondary disabled">
         Download for Android
       </div>
     </div>
 
-    <div class="note">
+    <div id="note" class="note">
       Android version will be available in Google Play shortly.
     </div>
 
@@ -165,5 +165,50 @@
     </div>
 
   </div>
+
+  <script>
+    const APP_STORE_URL = "https://apps.apple.com/app/id6760977519";
+    const PLAY_STORE_URL = ""; // Add Google Play URL here when available
+
+    function isIOS() {
+      return /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+        (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    }
+
+    function isAndroid() {
+      return /Android/i.test(navigator.userAgent);
+    }
+
+    function isValidPlayStoreUrl(url) {
+      return /^https:\\/\\/play\\.google\\.com\\/store\\/apps\\/details\\?id=[A-Za-z0-9._-]+$/i.test(url);
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const iphoneBtn = document.getElementById("iphoneBtn");
+      const androidBtn = document.getElementById("androidBtn");
+      const note = document.getElementById("note");
+      const playStoreReady = isValidPlayStoreUrl(PLAY_STORE_URL);
+
+      if (isIOS()) {
+        note.textContent = "iPhone detected. Tap below to download from the App Store.";
+      } else if (isAndroid()) {
+        if (playStoreReady) {
+          const a = document.createElement("a");
+          a.id = "androidBtn";
+          a.href = PLAY_STORE_URL;
+          a.className = "btn btn-primary";
+          a.textContent = "Download for Android";
+          androidBtn.replaceWith(a);
+
+          iphoneBtn.className = "btn btn-secondary";
+          note.textContent = "Android detected. Tap below to download from Google Play.";
+        } else {
+          note.textContent = "Android detected. Google Play version is coming soon. iPhone version is available now.";
+        }
+      } else {
+        note.textContent = "Choose your platform below. Android version is coming soon.";
+      }
+    });
+  </script>
 </body>
 </html>
