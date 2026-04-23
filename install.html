@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>QR DOC READER</title>
+  <meta name="description" content="Download QR DOC READER for iPhone and Android." />
 
   <style>
     body {
@@ -29,7 +30,7 @@
     }
 
     .logo {
-      width: 140px;
+      width: 160px;
       margin-bottom: 18px;
       border-radius: 28px;
     }
@@ -56,6 +57,14 @@
       color: #2f4c7a;
       line-height: 1.6;
       text-align: left;
+    }
+
+    .status {
+      margin: 12px 0 18px;
+      font-size: 0.95rem;
+      color: #5c6f8c;
+      line-height: 1.5;
+      min-height: 40px;
     }
 
     .buttons {
@@ -91,21 +100,6 @@
       box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
     }
 
-    .disabled {
-      background: #eef2f7;
-      color: #7a8799;
-      pointer-events: none;
-      cursor: default;
-      box-shadow: none;
-    }
-
-    .note {
-      margin-top: 14px;
-      font-size: 0.9rem;
-      color: #8a97ab;
-      line-height: 1.5;
-    }
-
     .footer {
       margin-top: 22px;
       font-size: 0.85rem;
@@ -122,7 +116,7 @@
       }
 
       .logo {
-        width: 120px;
+        width: 130px;
       }
     }
   </style>
@@ -143,21 +137,21 @@
     <div class="highlight">
       • Smart QR-based document access<br>
       • Built-in project-specific dictionary support<br>
-      • <strong>Android version coming soon</strong>
+      • Available now on iPhone and Android
+    </div>
+
+    <div id="status" class="status">
+      Checking your device...
     </div>
 
     <div class="buttons">
-      <a id="iphoneBtn" href="https://apps.apple.com/app/id6760977519" class="btn btn-primary">
+      <a id="iphoneBtn" href="https://apps.apple.com/app/id6760977519" class="btn btn-secondary">
         Download for iPhone
       </a>
 
-      <div id="androidBtn" class="btn btn-secondary disabled">
+      <a id="androidBtn" href="https://play.google.com/store/apps/details?id=com.noyrosun.qrdocreader" class="btn btn-secondary">
         Download for Android
-      </div>
-    </div>
-
-    <div id="note" class="note">
-      Android version will be available in Google Play shortly.
+      </a>
     </div>
 
     <div class="footer">
@@ -168,7 +162,11 @@
 
   <script>
     const APP_STORE_URL = "https://apps.apple.com/app/id6760977519";
-    const PLAY_STORE_URL = ""; // Add Google Play URL here when available
+    const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.noyrosun.qrdocreader";
+
+    const iphoneBtn = document.getElementById("iphoneBtn");
+    const androidBtn = document.getElementById("androidBtn");
+    const statusEl = document.getElementById("status");
 
     function isIOS() {
       return /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
@@ -179,35 +177,40 @@
       return /Android/i.test(navigator.userAgent);
     }
 
-    function isValidPlayStoreUrl(url) {
-      return /^https:\\/\\/play\\.google\\.com\\/store\\/apps\\/details\\?id=[A-Za-z0-9._-]+$/i.test(url);
+    function updateButtonStyles(activePlatform) {
+      iphoneBtn.className = "btn btn-secondary";
+      androidBtn.className = "btn btn-secondary";
+
+      if (activePlatform === "ios") {
+        iphoneBtn.className = "btn btn-primary";
+      } else if (activePlatform === "android") {
+        androidBtn.className = "btn btn-primary";
+      }
+    }
+
+    function redirectToStore(url) {
+      setTimeout(() => {
+        window.location.replace(url);
+      }, 700);
     }
 
     window.addEventListener("DOMContentLoaded", () => {
-      const iphoneBtn = document.getElementById("iphoneBtn");
-      const androidBtn = document.getElementById("androidBtn");
-      const note = document.getElementById("note");
-      const playStoreReady = isValidPlayStoreUrl(PLAY_STORE_URL);
-
       if (isIOS()) {
-        note.textContent = "iPhone detected. Tap below to download from the App Store.";
-      } else if (isAndroid()) {
-        if (playStoreReady) {
-          const a = document.createElement("a");
-          a.id = "androidBtn";
-          a.href = PLAY_STORE_URL;
-          a.className = "btn btn-primary";
-          a.textContent = "Download for Android";
-          androidBtn.replaceWith(a);
-
-          iphoneBtn.className = "btn btn-secondary";
-          note.textContent = "Android detected. Tap below to download from Google Play.";
-        } else {
-          note.textContent = "Android detected. Google Play version is coming soon. iPhone version is available now.";
-        }
-      } else {
-        note.textContent = "Choose your platform below. Android version is coming soon.";
+        updateButtonStyles("ios");
+        statusEl.textContent = "iPhone / iPad detected. Redirecting to the App Store...";
+        redirectToStore(APP_STORE_URL);
+        return;
       }
+
+      if (isAndroid()) {
+        updateButtonStyles("android");
+        statusEl.textContent = "Android phone detected. Redirecting to Google Play...";
+        redirectToStore(PLAY_STORE_URL);
+        return;
+      }
+
+      statusEl.textContent = "We could not detect the correct phone platform automatically. Please choose QR DOC READER for iPhone or Android below.";
+      updateButtonStyles("");
     });
   </script>
 </body>
